@@ -22,6 +22,7 @@ function App() {
     addCoffee, 
     redeemFreeCoffee, 
     updateRegularOrder,
+    removeCustomer,
     addProfilePicture,
     removeProfilePicture,
     importCustomersFromCSV,
@@ -36,8 +37,8 @@ function App() {
   const [selectedCustomer, setSelectedCustomer] = useState(null);
 
   const filteredCustomers = customers.filter(customer =>
-    customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    customer.email.toLowerCase().includes(searchTerm.toLowerCase())
+    customer.name.toLowerCase().startsWith(searchTerm.toLowerCase()) ||
+    customer.email.toLowerCase().startsWith(searchTerm.toLowerCase())
   );
 
   const eligibleForReward = filteredCustomers.filter(c => c.coffeeCount >= LOYALTY_THRESHOLD);
@@ -140,6 +141,7 @@ function App() {
           onAddCoffee={handleAddCoffee}
           onRedeemReward={handleRedeemReward}
           onUpdateOrder={updateRegularOrder}
+          onRemove={removeCustomer}
           profilePicture={selectedCustomer ? profilePictures[selectedCustomer.id] : null}
           onAddProfilePicture={addProfilePicture}
           onRemoveProfilePicture={removeProfilePicture}

@@ -10,10 +10,17 @@ export const useCustomers = () => {
     const savedPictures = localStorage.getItem('cafeProfilePictures');
     
     if (savedCustomers) {
-      setCustomers(JSON.parse(savedCustomers));
+      const parsed = JSON.parse(savedCustomers);
+      const seen = new Set();
+      const deduped = parsed.filter(c => {
+        if (seen.has(String(c.id))) return false;
+        seen.add(String(c.id));
+        return true;
+      });
+      setCustomers(deduped);
     } else {
       // Sample data (removed phone field)
-      const sampleData = [
+       const sampleData = [
         {
           id: 1,
           name: 'Sarah Johnson',
@@ -115,6 +122,16 @@ export const useCustomers = () => {
     }));
   };
 
+  const removeCustomer = (customerId) => {
+    setCustomers(prev => prev.filter(c => c.id !== customerId));
+    // Clean up their profile picture too
+    setProfilePictures(prev => {
+      const updated = { ...prev };
+      delete updated[customerId];
+      return updated;
+    });
+  };
+
   const addProfilePicture = (customerId, imageDataUrl) => {
     setProfilePictures(prev => ({
       ...prev,
@@ -197,6 +214,7 @@ export const useCustomers = () => {
     addCoffee,
     redeemFreeCoffee,
     updateRegularOrder,
+    removeCustomer, 
     addProfilePicture,
     removeProfilePicture,
     importCustomersFromCSV,

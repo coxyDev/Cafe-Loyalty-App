@@ -8,6 +8,7 @@ const CustomerModal = ({
   onAddCoffee, 
   onRedeemReward, 
   onUpdateOrder,
+  onRemove,
   profilePicture,
   onAddProfilePicture,
   onRemoveProfilePicture
@@ -148,6 +149,21 @@ const CustomerModal = ({
               Redeem Free Coffee
             </button>
           )}
+        </div>
+
+        <div className="form-buttons" style={{ marginTop: '8px' }}>
+          <button
+            onClick={() => {
+              if (window.confirm(`Remove ${customer.name} from the system? This cannot be undone.`)) {
+                onRemove(customer.id);
+                onClose();
+              }
+            }}
+            className="button button-secondary flex-1"
+            style={{ color: '#dc2626', borderColor: '#fecaca' }}
+          >
+            Remove Staff Member
+          </button>
         </div>
       </div>
     </div>
